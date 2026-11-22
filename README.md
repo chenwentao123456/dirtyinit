@@ -2,10 +2,10 @@
 
 > 面向 HUAWEI Kirin 990 / HarmonyOS 4.2 的页缓存（page cache）提权与硬件调优工具。
 
-**站点：** https://chenwentao123456.github.io/dirtyinit/  
-**GitHub Pages：** https://chenwentao123456.github.io/dirtyinit/  
-**镜像（自有服务器）：** http://121.41.93.16/dirtyinit/  
-**工程/源码仓库：** https://github.com/chenwentao123456/dirtyinit-tool
+站点：https://chenwentao123456.github.io/dirtyinit/  
+镜像：http://121.41.93.16/dirtyinit/  
+Releases：https://github.com/chenwentao123456/dirtyinit/releases/latest  
+作者：OxfordP（[@chenwentao123456](https://github.com/chenwentao123456)）
 
 本仓库同时托管 DirtyInit 的**产品官网**（下载页 + 说明），源码就是一个纯静态站点：
 `index.html` / `styles.css` / `app.js`，无构建步骤，直接把仓库根目录作为 GitHub Pages 源即可。
@@ -33,6 +33,13 @@ payload 打开一条 `init` 域的 shell 通道；你在 Termux 里拿到的 `ui
 | [dirtyinit-hw.sh](downloads/dirtyinit-hw.sh) | Kirin 990 调优脚本（14 个 action） | 14,758 B | `750bde6bba8858f1ad48353ed0bd6982136eb1ba041258bdd61ebccf32cf020e` |
 | [dirtyinit_adb5555_combined_README.txt](downloads/dirtyinit_adb5555_combined_README.txt) | 二合一版原始说明 | 2,125 B | `1d47436847a78557428ac746456c1b80e9044726ec0d1a0dee7c27c48b7ff00c` |
 | [使用说明.txt](downloads/使用说明.txt) | 站点整理版使用说明 | 3,989 B | `f1a1a4c29b400de53de76ed9d5fe7e18559347e225e6fa6750c22de8b8fa3141` |
+
+## Releases
+
+所有可下载文件同时以 GitHub Releases 形式发布：[**v1.00**](https://github.com/chenwentao123456/dirtyinit/releases/tag/v1.00)
+
+Releases 资产名：`dirtyinit_tools3.apk`、`dirtyinit_adb5555_combined.apk`、`dirtyinit.apk`、
+`dirtyinit-hw.sh`、`dirtyinit_adb5555_combined_README.txt`、`dirtyinit_usage.txt`（使用说明整理版）。
 
 ## 快速开始
 
@@ -74,6 +81,18 @@ cpu_status / cpu_max / cpu_turbo / cpu_gov / cpu_restore / beast / restore
 - 重启后 5555 不会保留，需要重新开启。
 - KernelSU 在本机不可行：内核 `CONFIG_MODULE_SIG_FORCE=y` + 华为签名私钥 + `MODVERSIONS=y`，BL 锁定且 verity 开启。
 - debug 签名与官方签名冲突，安装前需卸载原版。
+
+## 作者
+
+| 项目 | 值 |
+|---|---|
+| 作者 | OxfordP |
+| GitHub | [@chenwentao123456](https://github.com/chenwentao123456) |
+| 项目 | DirtyInit v1.00 |
+| 平台 | Kirin 990 / HarmonyOS 4.2 |
+| 许可 | 仅供研究测试 |
+
+站点维护、工程仓库、APK 打包都在这里；机型兼容问题欢迎开 issue。
 
 ## 免责声明
 
