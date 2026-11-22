@@ -1,0 +1,74 @@
+DirtyInit 使用说明
+==================
+
+适用平台：HUAWEI Kirin 990 系列 / HarmonyOS 4.2.0 / Android 12 (SDK 31) / kernel 5.10.43 aarch64
+已验证机型：HONOR V30 PRO (HUAWEI OXF-AN10)
+包名：com.dirty.init    版本：v1.00（tools3 构建）
+
+------------------------------------------------------------
+一、下载内容
+------------------------------------------------------------
+1) dirtyinit_tools3.apk          249 KB  最新推荐：提权 + ADB 5555 + CPU/温控面板
+   SHA-256: 4d7d2c22dac38aecaeb864374be9fbfa1e420c3365043ccc927403e0dd087808
+
+2) dirtyinit_adb5555_combined.apk 245 KB 二合一：ENABLE ADB 5555 自动分两阶段注入
+   SHA-256: eeb24586a7cb0443f6d33c6436c2c5c7e6b25d4254b8000eb8906e919f326f83
+
+3) dirtyinit.apk                 273 KB 原版 v1.00：EXECUTE EXPLOIT + EXTRACT CLI
+   SHA-256: 2a7515a60f4e63004469f4d2d6ff93b900b660c547eaeeb0369e88d5bb7d0607
+
+4) dirtyinit-hw.sh                14 KB Kirin 990 调优后端脚本（14 个 action，可 restore）
+   SHA-256: 750bde6bba8858f1ad48353ed0bd6982136eb1ba041258bdd61ebccf32cf020e
+
+校验方式：sha256sum <文件>，输出与上面一致即可。
+
+------------------------------------------------------------
+二、快速开始
+------------------------------------------------------------
+0) 手机屏幕保持解锁；电脑与手机在同一局域网。
+
+1) 卸载官方原版（修改版是 debug 签名，签名不同无法覆盖安装）
+   adb uninstall com.dirty.init
+
+2) 安装（推荐 tools3）
+   adb install -r dirtyinit_tools3.apk
+
+3) 触发部署（二选一）
+   A. 打开 App，点 "ENABLE ADB 5555" 或 "ONE-TOUCH EXPLOIT"
+   B. 无界面触发：
+      adb shell am start -n com.dirty.init/.DirtyInitActivity --ez autorun true
+
+4) 验证 ADB 5555
+   adb shell getprop service.adb.tcp.port     # 输出 5555
+   adb shell netstat -tln | grep 5555         # [::]:5555 LISTEN
+   adb connect <手机IP>:5555
+
+5) 验证 relay（init 域）
+   adb shell /data/local/tmp/dirtyinit id
+   # uid=0(root) gid=0(root) context=u:r:init:s0
+
+------------------------------------------------------------
+三、调优脚本用法
+------------------------------------------------------------
+   adb push dirtyinit-hw.sh /data/local/tmp/
+   adb shell sh /data/local/tmp/dirtyinit-hw.sh status
+   adb shell sh /data/local/tmp/dirtyinit-hw.sh beast      # thermal_stop + cpu_max + mem_opt + touch_tune
+   adb shell sh /data/local/tmp/dirtyinit-hw.sh restore    # 撤销全部改动
+
+可用 action：status | selinux [on|off] | thermal_status | thermal_stop | thermal_restore |
+              mem_status | mem_opt | mem_restore | touch_status | touch_tune | touch_restore |
+              cpu_status | cpu_max | cpu_turbo | cpu_gov <gov> | cpu_restore | beast | restore
+
+------------------------------------------------------------
+四、注意事项（务必阅读）
+------------------------------------------------------------
+1. 需要屏幕已解锁：安全锁屏下 Activity 会被延迟启动（am start 返回 -92）。
+2. 5555 不跨重启保留：每次开机后需要重新点一次按钮 / 重新 autorun。
+3. 同一次开机内只允许干净部署一种 payload：先 EXECUTE EXPLOIT 再点 ENABLE ADB 5555（或反过来）
+   可能读到被改过的 libbase 字节，导致 kernel panic。要换模式请先重启手机。
+4. 修改版为 debug 签名，安装前需卸载原版 com.dirty.init（会丢原 App 数据，sdcard 文件不受影响）。
+5. 本机内核 CONFIG_MODULE_SIG_FORCE=y + 华为签名私钥 + MODVERSIONS=y，BL 锁定/verity，
+   无法加载第三方 ko，因此不能通过 KernelSU 方式 root。
+6. 所有改动均为运行时修改：不写 /system、不改分区、不解锁 BL，重启自动还原。
+7. thermal_stop 会关闭过温保护，长时间满载可能过热并损伤电池 / SoC，随时用 restore 回滚。
+8. 本项目仅供自有设备的本地研究、测试与调优，请勿用于任何未授权设备，风险自负。

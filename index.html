@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DirtyInit · Kirin 990 / HarmonyOS 4.2 本地提权与调优工具箱</title>
+<meta name="description" content="DirtyInit 是面向 HUAWEI Kirin 990 / HarmonyOS 4.2 的本地提权与硬件调优工具箱：一键 relay init shell、开启 ADB 5555、CPU 频率与温控调优。提供 APK 与调优脚本下载。">
+<meta name="theme-color" content="#06080b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23090c10'/%3E%3Crect x='1' y='1' width='62' height='62' rx='13' fill='none' stroke='%23b7f24b' stroke-width='2'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='24' font-weight='bold' fill='%23b7f24b' text-anchor='middle'%3EDI%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-orb orb-a" aria-hidden="true"></div>
+<div class="bg-orb orb-b" aria-hidden="true"></div>
+<div class="bg-orb orb-c" aria-hidden="true"></div>
+<div class="noise" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top" aria-label="DirtyInit 首页">
+      <span class="brand-mark">DI</span>
+      <span class="brand-text">Dirty<em>Init</em></span>
+      <span class="brand-ver">v1.00</span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#about">简介</a>
+      <a href="#features">功能</a>
+      <a href="#flow">流程</a>
+      <a href="#downloads">下载</a>
+      <a href="#compat">兼容</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="#downloads">立即下载</a>
+      <button class="menu-btn" id="menuBtn" aria-label="打开菜单" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <div class="pill reveal">
+          <span class="dot"></span>
+          HarmonyOS 4.2 · Android 12 · kernel 5.10.43
+        </div>
+        <h1 class="reveal">
+          <span class="h1-line">撕开页缓存，</span>
+          <span class="h1-line grad">拿回 init shell。</span>
+        </h1>
+        <p class="lead reveal">
+          <strong>DirtyInit</strong> 是一个面向 HUAWEI Kirin 990 平台、HarmonyOS 4.2 的本地提权与硬件调优工具箱。
+          利用 <code>IpSecManager</code> 路径上的页缓存写入原语完成提权，落地后的武器是干净的 <code>init</code> 域 shell、
+          一键 <code>ADB 5555</code>，以及一套可逆的 CPU / 温控调优面板。
+        </p>
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary" href="#downloads">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15 7.5 10.5M4 19.5h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            下载 APK
+          </a>
+          <a class="btn btn-ghost" href="#flow">查看使用流程</a>
+        </div>
+        <ul class="hero-meta reveal">
+          <li><span>包名</span><code>com.dirty.init</code></li>
+          <li><span>已验证设备</span>HONOR V30 PRO · OXF-AN10</li>
+          <li><span>签名</span>debug（需卸载原版）</li>
+        </ul>
+      </div>
+
+      <div class="hero-visual">
+        <div class="terminal reveal" id="terminal">
+          <div class="term-bar">
+            <span class="term-dots"><i></i><i></i><i></i></span>
+            <span class="term-title">init-shell — relay</span>
+            <span class="term-badge">LIVE</span>
+          </div>
+          <pre class="term-body" id="termBody" aria-live="polite"></pre>
+          <div class="term-foot">
+            <span class="term-prompt">$</span>
+            <span class="term-hint">deploy → relay → uid=0</span>
+          </div>
+        </div>
+
+        <div class="phone reveal" aria-hidden="true">
+          <div class="phone-screen">
+            <div class="ph-status"><span>20:34</span><span>DIRTY INIT</span><span>▮▮▮</span></div>
+            <div class="ph-title">DirtyInit</div>
+            <div class="ph-sub">tools3 · OXF-AN10</div>
+            <div class="ph-btn ac">ONE-TOUCH EXPLOIT</div>
+            <div class="ph-btn">ENABLE ADB 5555</div>
+            <div class="ph-btn">ONE-CLICK MAX + ADB</div>
+            <div class="ph-row"><span>CPU 频率</span><b>Max ‒‒</b></div>
+            <div class="ph-row"><span>温控</span><b>Disabled</b></div>
+            <div class="ph-console">&gt; uid=0(root) context=u:r:init:s0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-stats container">
+      <div class="stat reveal"><b data-count="4">4</b><span>可下载资源</span></div>
+      <div class="stat reveal"><b>v1.00</b><span>当前版本</span></div>
+      <div class="stat reveal"><b data-count="15">15</b><span>秒内开启 ADB</span></div>
+      <div class="stat reveal"><b data-count="0">0</b><span>次重启（干净部署）</span></div>
+    </div>
+  </section>
+
+  <!-- ================= TICKER ================= -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>init_shell_relay</span><span class="sep">///</span>
+      <span>page_cache</span><span class="sep">///</span>
+      <span>adb_5555</span><span class="sep">///</span>
+      <span>cpu_max</span><span class="sep">///</span>
+      <span>thermal_stop</span><span class="sep">///</span>
+      <span>mem_opt</span><span class="sep">///</span>
+      <span>restore</span><span class="sep">///</span>
+      <span>kirin_990</span><span class="sep">///</span>
+      <span>init_shell_relay</span><span class="sep">///</span>
+      <span>page_cache</span><span class="sep">///</span>
+      <span>adb_5555</span><span class="sep">///</span>
+      <span>cpu_max</span><span class="sep">///</span>
+      <span>thermal_stop</span><span class="sep">///</span>
+      <span>mem_opt</span><span class="sep">///</span>
+      <span>restore</span><span class="sep">///</span>
+      <span>kirin_990</span><span class="sep">///</span>
+    </div>
+  </div>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-tag">01 — 简介</span>
+        <h2>它不是 Root，是「临时拿到 init 域」</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-copy reveal">
+          <p>
+            DirtyInit 走的是页缓存（page cache）篡改路线：通过 <code>IpSecManager</code> 相关接口在目标
+            <code>libbase.so</code> 上完成一次可控的 16 字节块写，把本应只读的代码页改成我们需要的跳转，
+            从而在 <code>init</code> 上下文中获得一次代码执行的机会。
+          </p>
+          <p>
+            执行成功后，APK 会把一个 <code>dirtyinit</code> ELF 投放到 <code>/data/local/tmp/</code>，
+            再借由 relay payload 打开一条 <code>init</code> 域的 shell 通道；你在 Termux 里得到的
+            <code>uid=0</code> 会话，安全上下文是 <code>u:r:init:s0</code> —— 比普通 root 更"靠前"的一层。
+          </p>
+          <p>
+            因为整个过程只在内存与页缓存里发生，<strong>不写 /system、不动分区、不解锁 BL、不刷 boot</strong>，
+            设备重启即完全还原。这也是它无法（也不需要）做成常驻 root 的原因。
+          </p>
+          <div class="note">
+            <span class="note-k">注意</span>
+            页缓存状态是「一次性」的：同一次开机内只允许干净部署一种 payload，混用可能读到被改过的字节，导致 kernel panic。
+          </div>
+        </div>
+        <div class="about-cards">
+          <article class="mini-card reveal">
+            <div class="mini-ico">01</div>
+            <h3>页缓存写入</h3>
+            <p>目标 ELF 的只读代码页被映射改写，得到一个很小的代码执行窗口。</p>
+          </article>
+          <article class="mini-card reveal">
+            <div class="mini-ico">02</div>
+            <h3>relay init shell</h3>
+            <p>把 <code>dirtyinit</code> ELF 落到 <code>/data/local/tmp</code>，打开 <code>init</code> 域通道。</p>
+          </article>
+          <article class="mini-card reveal">
+            <div class="mini-ico">03</div>
+            <h3>运行时、可逆</h3>
+            <p>全部改动只在内存与运行时属性里，重启还原；调优脚本支持 <code>restore</code>。</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FEATURES ================= -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-tag">02 — 功能</span>
+        <h2>一个 APK，三套武器</h2>
+        <p class="sec-sub">提权入口、ADB 通道、硬件调优，全部收在一个面板里。</p>
+      </div>
+      <div class="features">
+        <article class="feat reveal">
+          <div class="feat-ico">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 3 4 7v6c0 4.5 3.4 7.4 8 8 4.6-.6 8-3.5 8-8V7l-8-4Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m8.8 12.2 2.2 2.2 4.2-4.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>一键提权（EXECUTE EXPLOIT）</h3>
+          <p>点一下就完成 payload 注入与 relay 部署，成功后可直接 <code>EXTRACT CLI</code> 到 Termux，用 <code>dirtyinit</code> / <code>rish</code> 操作 init 域。</p>
+          <ul class="feat-tags"><li>init shell</li><li>u:r:init:s0</li><li>ELF 落地</li></ul>
+        </article>
+
+        <article class="feat reveal">
+          <div class="feat-ico">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M7 7h10v10H7z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3>一键开启 ADB 5555</h3>
+          <p>自动 <code>setprop service.adb.tcp.port 5555</code> 并 <code>ctl.restart adbd</code>，15–20 秒后手机开始监听 TCP 5555，电脑直接 <code>adb connect</code>。</p>
+          <ul class="feat-tags"><li>adbd 重启</li><li>[::]:5555</li><li>免数据线</li></ul>
+        </article>
+
+        <article class="feat reveal">
+          <div class="feat-ico">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 8h16M4 16h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="8" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="15" cy="16" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          </div>
+          <h3>二合一 payload</h3>
+          <p><code>ENABLE ADB 5555</code> 按钮内部自动分两阶段：先注入 ADB payload，再用「直接返回」版 relay payload 收尾，避免破坏第一次部署。</p>
+          <ul class="feat-tags"><li>两阶段注入</li><li>同一开机内安全</li><li>~20s</li></ul>
+        </article>
+
+        <article class="feat reveal">
+          <div class="feat-ico">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>硬件调优面板（tools3）</h3>
+          <p>CPU 三簇频率锁定、<code>schedutil</code> 升频曲线、温控守护进程开关、内存 VM 参数与触控响应，全部图形化操作。</p>
+          <ul class="feat-tags"><li>CPU max</li><li>thermal stop</li><li>mem opt</li></ul>
+        </article>
+
+        <article class="feat reveal">
+          <div class="feat-ico">
+            <svg viewBox="0 0 24 24" width="22" height="22"><rect x="3.5" y="5" width="17" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 20h8M12 17v3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="m9 9 1.6 1.6L9 12.2M13 12.2h2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>无界面触发</h3>
+          <p>脚本、快捷指令、锁屏自动化都能用 <code>am start … --ez autorun true</code> 直接触发，等价于点按钮，适合自动化流水线。</p>
+          <ul class="feat-tags"><li>am start</li><li>autorun</li><li>可脚本化</li></ul>
+        </article>
+
+        <article class="feat reveal">
+          <div class="feat-ico">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M20 12a8 8 0 1 1-3.2-6.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>可撤销，不脏系统</h3>
+          <p>调优脚本每个动作都会备份原值，<code>restore</code> 一键回滚；APK 侧的所有改动随重启消失，不给系统留垃圾。</p>
+          <ul class="feat-tags"><li>restore</li><li>无残留</li><li>重启还原</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FLOW ================= -->
+  <section class="section" id="flow">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-tag">03 — 流程</span>
+        <h2>三步，从安装到 init shell</h2>
+        <p class="sec-sub">以下命令可直接复制，替换 <code>&lt;手机IP&gt;</code> 即可。</p>
+      </div>
+
+      <div class="steps">
+        <article class="step reveal">
+          <div class="step-n">STEP 1</div>
+          <h3>安装 APK</h3>
+          <p>修改版使用 debug 签名，与官方原版不同，<strong>安装前先卸载原版</strong> <code>com.dirty.init</code>（会丢原 App 数据，sdcard 文件不受影响）。</p>
+          <div class="code-block">
+            <button class="copy" data-copy="adb install -r dirtyinit_tools3.apk" aria-label="复制命令">复制</button>
+            <pre><span class="c-com"># 卸载原版后安装修改版</span>
+adb install -r dirtyinit_tools3.apk</pre>
+          </div>
+        </article>
+
+        <article class="step reveal">
+          <div class="step-n">STEP 2</div>
+          <h3>触发部署</h3>
+          <p>点亮并解锁屏幕，打开 App 点 <code>ENABLE ADB 5555</code>（或 <code>ONE-TOUCH EXPLOIT</code>），也可以用命令无界面触发。安全锁屏状态下 Activity 会被延迟启动。</p>
+          <div class="code-block">
+            <button class="copy" data-copy="adb shell am start -n com.dirty.init/.DirtyInitActivity --ez autorun true" aria-label="复制命令">复制</button>
+            <pre><span class="c-com"># 等价于点击按钮</span>
+adb shell am start -n com.dirty.init/.DirtyInitActivity \
+  --ez autorun true</pre>
+          </div>
+        </article>
+
+        <article class="step reveal">
+          <div class="step-n">STEP 3</div>
+          <h3>连接并验证</h3>
+          <p>手机与电脑同一局域网，确认 5555 已监听后 <code>adb connect</code>，再验证 relay 的 uid 与安全上下文。</p>
+          <div class="code-block">
+            <button class="copy" data-copy="adb shell getprop service.adb.tcp.port&#10;adb shell netstat -tln | grep 5555&#10;adb connect <手机IP>:5555&#10;adb shell /data/local/tmp/dirtyinit id" aria-label="复制命令">复制</button>
+            <pre>adb shell getprop service.adb.tcp.port   <span class="c-out"># 5555</span>
+adb shell netstat -tln | grep 5555       <span class="c-out"># [::]:5555 LISTEN</span>
+adb connect &lt;手机IP&gt;:5555               <span class="c-out"># connected to ...</span>
+adb shell /data/local/tmp/dirtyinit id   <span class="c-out"># uid=0(root) context=u:r:init:s0</span></pre>
+          </div>
+        </article>
+      </div>
+
+      <div class="warning reveal">
+        <div class="warning-ico">!</div>
+        <div>
+          <h4>同一次开机内只能干净部署一种 payload</h4>
+          <p>先 <code>EXECUTE EXPLOIT</code> 再点 <code>ENABLE ADB 5555</code>（或反过来）可能读到被改过的 <code>libbase</code> 字节，触发 kernel panic。要换模式请先重启手机。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DOWNLOADS ================= -->
+  <section class="section" id="downloads">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-tag">04 — 下载</span>
+        <h2>选择你的版本</h2>
+        <p class="sec-sub">全部文件托管在本站，直接下载；每个文件附带 SHA-256 校验值。</p>
+      </div>
+
+      <div class="dl-grid">
+        <article class="dl-card featured reveal">
+          <div class="dl-badge">最新推荐</div>
+          <div class="dl-head">
+            <div class="dl-ico">T3</div>
+            <div>
+              <h3>DirtyInit Tools3</h3>
+              <p class="dl-sub">提权 + ADB 5555 + CPU / 温控面板</p>
+            </div>
+          </div>
+          <ul class="dl-points">
+            <li>ONE-TOUCH EXPLOIT / ENABLE ADB 5555 / ONE-CLICK MAX + ADB</li>
+            <li>CPU 频率（min / max）实时调节、温控开 / 关</li>
+            <li>最新构建：tools3，已验证干净部署</li>
+          </ul>
+          <div class="dl-file">
+            <span class="dl-name">dirtyinit_tools3.apk</span>
+            <span class="dl-size">249 KB</span>
+          </div>
+          <div class="dl-hash">
+            <span>SHA-256</span>
+            <code data-hash>4d7d2c22dac38aecaeb864374be9fbfa1e420c3365043ccc927403e0dd087808</code>
+            <button class="copy-mini" data-copy="4d7d2c22dac38aecaeb864374be9fbfa1e420c3365043ccc927403e0dd087808" aria-label="复制 SHA-256">copy</button>
+          </div>
+          <a class="btn btn-primary dl-btn" href="downloads/dirtyinit_tools3.apk" download>
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 3v12m0 0 4.5-4.5M12 15 7.5 10.5M4 19.5h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            下载 APK
+          </a>
+        </article>
+
+        <article class="dl-card reveal">
+          <div class="dl-head">
+            <div class="dl-ico">2in1</div>
+            <div>
+              <h3>二合一 ADB 5555</h3>
+              <p class="dl-sub">ENABLE ADB 5555 = 两阶段 payload</p>
+            </div>
+          </div>
+          <ul class="dl-points">
+            <li>点一次按钮，自动完成 ADB 5555 + relay 恢复</li>
+            <li>EXECUTE EXPLOIT 保持原版 relay 行为</li>
+            <li>适合只想开 ADB、又不想丢 relay 的场景</li>
+          </ul>
+          <div class="dl-file">
+            <span class="dl-name">dirtyinit_adb5555_combined.apk</span>
+            <span class="dl-size">245 KB</span>
+          </div>
+          <div class="dl-hash">
+            <span>SHA-256</span>
+            <code data-hash>eeb24586a7cb0443f6d33c6436c2c5c7e6b25d4254b8000eb8906e919f326f83</code>
+            <button class="copy-mini" data-copy="eeb24586a7cb0443f6d33c6436c2c5c7e6b25d4254b8000eb8906e919f326f83" aria-label="复制 SHA-256">copy</button>
+          </div>
+          <a class="btn btn-ghost dl-btn" href="downloads/dirtyinit_adb5555_combined.apk" download>
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 3v12m0 0 4.5-4.5M12 15 7.5 10.5M4 19.5h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            下载 APK
+          </a>
+        </article>
+
+        <article class="dl-card reveal">
+          <div class="dl-head">
+            <div class="dl-ico">v1</div>
+            <div>
+              <h3>DirtyInit 原版</h3>
+              <p class="dl-sub">v1.00 · EXECUTE EXPLOIT + EXTRACT CLI</p>
+            </div>
+          </div>
+          <ul class="dl-points">
+            <li>最原始的 relay / CLI 功能，无 ADB 5555 改动</li>
+            <li>不含 hardware tools 面板</li>
+            <li>适合对照原始行为、复现问题</li>
+          </ul>
+          <div class="dl-file">
+            <span class="dl-name">dirtyinit.apk</span>
+            <span class="dl-size">273 KB</span>
+          </div>
+          <div class="dl-hash">
+            <span>SHA-256</span>
+            <code data-hash>2a7515a60f4e63004469f4d2d6ff93b900b660c547eaeeb0369e88d5bb7d0607</code>
+            <button class="copy-mini" data-copy="2a7515a60f4e63004469f4d2d6ff93b900b660c547eaeeb0369e88d5bb7d0607" aria-label="复制 SHA-256">copy</button>
+          </div>
+          <a class="btn btn-ghost dl-btn" href="downloads/dirtyinit.apk" download>
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 3v12m0 0 4.5-4.5M12 15 7.5 10.5M4 19.5h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            下载 APK
+          </a>
+        </article>
+
+        <article class="dl-card reveal">
+          <div class="dl-head">
+            <div class="dl-ico sh">sh</div>
+            <div>
+              <h3>dirtyinit-hw.sh</h3>
+              <p class="dl-sub">Kirin 990 调优后端脚本（14 个 action）</p>
+            </div>
+          </div>
+          <ul class="dl-points">
+            <li><code>status</code> / <code>beast</code> / <code>restore</code> 一键组合</li>
+            <li>CPU 锁频、温控关闭、VM 参数、触控升频</li>
+            <li>纯运行时修改，脚本自带 <code>restore</code> 回滚</li>
+          </ul>
+          <div class="dl-file">
+            <span class="dl-name">dirtyinit-hw.sh</span>
+            <span class="dl-size">14 KB</span>
+          </div>
+          <div class="dl-hash">
+            <span>SHA-256</span>
+            <code data-hash>750bde6bba8858f1ad48353ed0bd6982136eb1ba041258bdd61ebccf32cf020e</code>
+            <button class="copy-mini" data-copy="750bde6bba8858f1ad48353ed0bd6982136eb1ba041258bdd61ebccf32cf020e" aria-label="复制 SHA-256">copy</button>
+          </div>
+          <a class="btn btn-ghost dl-btn" href="downloads/dirtyinit-hw.sh" download>
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 3v12m0 0 4.5-4.5M12 15 7.5 10.5M4 19.5h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            下载脚本
+          </a>
+        </article>
+      </div>
+
+      <p class="dl-foot reveal">
+        另附：<a href="downloads/dirtyinit_adb5555_combined_README.txt" download>二合一版原始说明.txt</a> ·
+        文件校验：<code>sha256sum &lt;file&gt;</code> 与上方值一致即可放心使用。
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= COMPAT ================= -->
+  <section class="section" id="compat">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-tag">05 — 兼容性</span>
+        <h2>在哪些设备上验证过</h2>
+        <p class="sec-sub">目前只在一台真机上完整验证；其他 Kirin 990 / HarmonyOS 4.2 机型属于「可尝试」。</p>
+      </div>
+      <div class="compat-grid">
+        <div class="table-wrap reveal">
+          <table class="compat-table">
+            <tbody>
+              <tr><th>设备</th><td>HONOR V30 PRO（HUAWEI OXF-AN10）</td><td class="ok">✔ 已验证</td></tr>
+              <tr><th>系统</th><td>HarmonyOS 4.2.0 / Android 12（SDK 31）</td><td class="ok">✔ 已验证</td></tr>
+              <tr><th>内核</th><td>5.10.43 aarch64</td><td class="ok">✔ 已验证</td></tr>
+              <tr><th>CPU</th><td>2×A76 @2.86G + 2×A76 @2.36G + 4×A55 @1.954G</td><td class="ok">✔ 已验证</td></tr>
+              <tr><th>SELinux</th><td>enforcing（<code>selinux off</code> 仅在运行时切 permissive）</td><td class="ok">✔ 已验证</td></tr>
+              <tr><th>KernelSU</th><td><code>CONFIG_MODULE_SIG_FORCE=y</code> + 华为签名私钥 + <code>MODVERSIONS=y</code>，BL 锁定 / verity</td><td class="no">✘ 不可用</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="compat-side reveal">
+          <h3>脚本用法</h3>
+          <p>把 <code>dirtyinit-hw.sh</code> 推到 <code>/data/local/tmp</code>，在提权后的 init / su shell 里执行：</p>
+          <div class="code-block">
+            <button class="copy" data-copy="adb push dirtyinit-hw.sh /data/local/tmp/&#10;adb shell sh /data/local/tmp/dirtyinit-hw.sh status&#10;adb shell sh /data/local/tmp/dirtyinit-hw.sh beast&#10;adb shell sh /data/local/tmp/dirtyinit-hw.sh restore" aria-label="复制命令">复制</button>
+            <pre>adb push dirtyinit-hw.sh /data/local/tmp/
+adb shell sh /data/local/tmp/dirtyinit-hw.sh status
+adb shell sh /data/local/tmp/dirtyinit-hw.sh beast
+adb shell sh /data/local/tmp/dirtyinit-hw.sh restore <span class="c-out"># 全部还原</span></pre>
+          </div>
+          <p class="small">可用 action：<code>status</code> <code>selinux</code> <code>thermal_stop</code> / <code>thermal_restore</code>
+            <code>mem_opt</code> / <code>mem_restore</code> <code>touch_tune</code> / <code>touch_restore</code>
+            <code>cpu_max</code> <code>cpu_turbo</code> <code>cpu_gov</code> <code>cpu_restore</code> <code>beast</code> <code>restore</code></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-tag">06 — 常见问题</span>
+        <h2>动手前先看这几条</h2>
+      </div>
+      <div class="faq reveal">
+        <details open>
+          <summary>需要先 root 吗？</summary>
+          <p>不需要。DirtyInit 自己就是提权入口：它依赖的是本机 <code>libbase.so</code> 的页缓存写入原语，而不是一个已有的 su。但它要求屏幕处于解锁状态，安全锁屏下 Activity 会被系统延迟启动（<code>am start</code> 返回 -92）。</p>
+        </details>
+        <details>
+          <summary>为什么重启后 ADB 5555 就没了？</summary>
+          <p><code>service.adb.tcp.port</code> 是运行时属性，写在内存里的 <code>init</code> 属性区，重启即丢；5555 的监听也随 <code>adbd</code> 重启而消失。每次开机后重新点一次 <code>ENABLE ADB 5555</code>（或用 <code>am start … autorun true</code>）即可。</p>
+        </details>
+        <details>
+          <summary>同一次开机为什么不能换 payload？</summary>
+          <p>页缓存的改动是「写进去就一直脏着」的：第二次部署时如果读到上一次被改过的 <code>libbase</code> 字节，relay 的构造会失效，最坏情况是 kernel panic。换模式请先重启手机，让页缓存恢复干净。</p>
+        </details>
+        <details>
+          <summary>安装时报签名冲突 / 覆盖失败？</summary>
+          <p>修改版使用 debug 签名，与官方原版不同。先卸载 <code>com.dirty.init</code> 再安装（会丢原 App 数据，/sdcard 上的文件不受影响）。</p>
+        </details>
+        <details>
+          <summary>为什么不能上 KernelSU？</summary>
+          <p>这台机器的内核开了 <code>CONFIG_MODULE_SIG_FORCE=y</code>，模块只能用华为私钥签名，加上 <code>MODVERSIONS=y</code>、BL 锁定与 verity，未签名或第三方编译的 <code>.ko</code> 无法加载，所以 ko 路线走不通。</p>
+        </details>
+        <details>
+          <summary>风险大吗？会不会变砖？</summary>
+          <p>它对系统的持久改动为零：不写 <code>/system</code>、不改分区、不解锁 BL。但页缓存操作本身属于不稳定原语，重复/混用 payload 可能导致内核 panic（重启即可恢复）。<code>beast</code> 会关闭温控，长时间满载有发热与电池损耗风险，随时 <code>restore</code> 回滚。</p>
+        </details>
+        <details>
+          <summary>可以拿去做别的事吗？</summary>
+          <p>不可以。本项目仅供自有设备的本地研究、测试与调优；请勿用于任何未授权设备。使用即表示你理解并自行承担全部风险。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="brand-mark">DI</span>
+      <div>
+        <strong>DirtyInit</strong>
+        <p>Kirin 990 · HarmonyOS 4.2 · 本地提权与调优工具箱</p>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="#downloads">下载</a>
+      <a href="#faq">常见问题</a>
+      <a href="#compat">兼容性</a>
+    </div>
+    <p class="footer-disclaimer">
+      仅供自有设备研究测试，请勿用于未授权设备。本页内容与文件均为本机验证记录，使用风险自负。
+    </p>
+    <p class="footer-copy">© <span id="year">2026</span> DirtyInit · 页面由 DirtyInit 项目维护</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
