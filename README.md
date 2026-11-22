@@ -2,8 +2,10 @@
 
 > 面向 HUAWEI Kirin 990 / HarmonyOS 4.2 的页缓存（page cache）提权与硬件调优工具。
 
-站点：https://github.com/  （GitHub Pages 待启用）  
-镜像：http://121.41.93.16/dirtyinit/
+**站点：** https://chenwentao123456.github.io/dirtyinit/  
+**GitHub Pages：** https://chenwentao123456.github.io/dirtyinit/  
+**镜像（自有服务器）：** http://121.41.93.16/dirtyinit/  
+**工程/源码仓库：** https://github.com/chenwentao123456/dirtyinit-tool
 
 本仓库同时托管 DirtyInit 的**产品官网**（下载页 + 说明），源码就是一个纯静态站点：
 `index.html` / `styles.css` / `app.js`，无构建步骤，直接把仓库根目录作为 GitHub Pages 源即可。
