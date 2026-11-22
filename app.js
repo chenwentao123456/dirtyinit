@@ -129,20 +129,18 @@
   var termBody = document.getElementById("termBody");
   if (termBody) {
     var lines = [
-      { t: "cmd", s: "adb install -r dirtyinit_tools3.apk" },
+      { t: "cmd", s: "adb install -r dirtyinit_v2.0.apk" },
       { t: "out", s: "Performing Streamed Install" },
       { t: "ok",  s: "Success" },
-      { t: "cmd", s: "adb shell am start -n com.dirty.init/.DirtyInitActivity --ez autorun true" },
-      { t: "out", s: "Starting: Intent { cmp=com.dirty.init/.DirtyInitActivity (has extras) }" },
-      { t: "out", s: "[*] deploying payload  (stage 1/2)" },
-      { t: "out", s: "[*] setprop service.adb.tcp.port 5555" },
-      { t: "out", s: "[*] ctl.restart adbd" },
-      { t: "out", s: "[*] deploying payload  (stage 2/2) relay" },
-      { t: "ok",  s: "[+] listening on [::]:5555" },
-      { t: "cmd", s: "adb connect 192.168.10.23:5555" },
-      { t: "ok",  s: "connected to 192.168.10.23:5555" },
+      { t: "cmd", s: "adb shell am start -n com.dirty.init/.MainActivity" },
+      { t: "out", s: "Starting: Intent { cmp=com.dirty.init/.MainActivity }" },
+      { t: "out", s: "[*] payload pipeline: idle -> deploying" },
+      { t: "out", s: "[*] page cache target: libbase.so" },
+      { t: "ok",  s: "[+] payload ACTIVE - init channel ready" },
       { t: "cmd", s: "adb shell /data/local/tmp/dirtyinit id" },
-      { t: "ok",  s: "uid=0(root) gid=0(root) context=u:r:init:s0" }
+      { t: "ok",  s: "uid=0(root) gid=0(root) context=u:r:init:s0" },
+      { t: "cmd", s: "curl -s -H \"Authorization: Bearer ***\" 127.0.0.1:8080/status" },
+      { t: "ok",  s: "{\"ok\":true,\"payload\":\"active\"}" }
     ];
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var plainText = lines.map(function (l) {
