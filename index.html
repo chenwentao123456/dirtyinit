@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DirtyInit · Kirin 990 / HarmonyOS 4.2 本地提权与调优工具箱</title>
-<meta name="description" content="DirtyInit 是面向 HUAWEI Kirin 990 / HarmonyOS 4.2 的本地提权与硬件调优工具箱：一键 relay init shell、开启 ADB 5555、CPU 频率与温控调优。提供 APK 与调优脚本下载。">
+<title>DirtyInit v2.00 · Kirin 990 / HarmonyOS 4.2 本地提权与调优工具箱</title>
+<meta name="description" content="DirtyInit v2.00 是面向 HUAWEI Kirin 990 / HarmonyOS 4.2 的本地提权与硬件调优工具箱：全新三页控制台（实时遥测 / 内置终端 / 本地 API 桥），一键 relay init shell、开启 ADB 5555、CPU 频率与温控调优。提供 APK 与调优脚本下载。">
 <meta name="theme-color" content="#06080b">
 <meta name="author" content="OxfordP (@chenwentao123456)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23090c10'/%3E%3Crect x='1' y='1' width='62' height='62' rx='13' fill='none' stroke='%23b7f24b' stroke-width='2'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='24' font-weight='bold' fill='%23b7f24b' text-anchor='middle'%3EDI%3C/text%3E%3C/svg%3E">
@@ -23,11 +23,12 @@
     <a class="brand" href="#top" aria-label="DirtyInit 首页">
       <span class="brand-mark">DI</span>
       <span class="brand-text">Dirty<em>Init</em></span>
-      <span class="brand-ver">v1.00</span>
+      <span class="brand-ver">v2.00</span>
     </a>
     <nav class="nav-links" id="navLinks">
       <a href="#about">简介</a>
       <a href="#features">功能</a>
+      <a href="#ui">界面</a>
       <a href="#flow">流程</a>
       <a href="#downloads">下载</a>
       <a href="#compat">兼容</a>
@@ -51,7 +52,7 @@
       <div class="hero-copy">
         <div class="pill reveal">
           <span class="dot"></span>
-          HarmonyOS 4.2 · Android 12 · kernel 5.10.43
+          <b class="pill-new">v2.00</b> 新界面 · HarmonyOS 4.2 · Android 12 · kernel 5.10.43
         </div>
         <h1 class="reveal">
           <span class="h1-line">撕开页缓存，</span>
@@ -62,6 +63,7 @@
           利用 <code>IpSecManager</code> 路径上的页缓存写入原语完成提权，落地后的武器是干净的 <code>init</code> 域 shell、
           一键 <code>ADB 5555</code>，以及一套可逆的 CPU / 温控调优面板。
         </p>
+        <p class="hero-note reveal">v2.00 换上了 FlClash 风格的三页控制台：<strong>Dashboard</strong> 看实时遥测，<strong>Terminal</strong> 直接敲 init shell，<strong>Settings</strong> 里还有一个只监听回环的本地 API 桥。</p>
         <div class="hero-cta reveal">
           <a class="btn btn-primary" href="#downloads">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15 7.5 10.5M4 19.5h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -92,23 +94,25 @@
 
         <div class="phone reveal" aria-hidden="true">
           <div class="phone-screen">
-            <div class="ph-status"><span>20:34</span><span>DIRTY INIT</span><span>▮▮▮</span></div>
-            <div class="ph-title">DirtyInit</div>
-            <div class="ph-sub">tools3 · OXF-AN10</div>
-            <div class="ph-btn ac">ONE-TOUCH EXPLOIT</div>
+            <div class="ph-status"><span>4:13</span><span>DIRTY INIT</span><span>▮▮▮</span></div>
+            <div class="ph-title">Dashboard</div>
+            <div class="ph-sub">payload · telemetry</div>
+            <div class="ph-tag">ACTIVE</div>
+            <div class="ph-btn ac">ACTIVATE PAYLOAD</div>
             <div class="ph-btn">ENABLE ADB 5555</div>
-            <div class="ph-btn">ONE-CLICK MAX + ADB</div>
-            <div class="ph-row"><span>CPU 频率</span><b>Max ‒‒</b></div>
-            <div class="ph-row"><span>温控</span><b>Disabled</b></div>
-            <div class="ph-console">&gt; uid=0(root) context=u:r:init:s0</div>
+            <div class="ph-btn">LOCK CPU TO MAX</div>
+            <div class="ph-row"><span>CPU</span><b>1.55 GHz</b></div>
+            <div class="ph-row"><span>Memory</span><b>4.6 / 7 GB</b></div>
+            <div class="ph-row"><span>Thermal</span><b>26 °C</b></div>
+            <div class="ph-console">&gt; init channel ready</div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="hero-stats container">
-      <div class="stat reveal"><b data-count="4">4</b><span>可下载资源</span></div>
-      <div class="stat reveal"><b>v1.00</b><span>当前版本</span></div>
+      <div class="stat reveal"><b data-count="5">5</b><span>可下载资源</span></div>
+      <div class="stat reveal"><b>v2.00</b><span>当前版本</span></div>
       <div class="stat reveal"><b data-count="15">15</b><span>秒内开启 ADB</span></div>
       <div class="stat reveal"><b data-count="0">0</b><span>次重启（干净部署）</span></div>
     </div>
@@ -251,11 +255,66 @@
     </div>
   </section>
 
+  <!-- ================= V2 INTERFACE ================= -->
+  <section class="section" id="ui">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-tag">03 — v2.00 界面</span>
+        <h2>控制台重做：一屏遥测，一页终端</h2>
+        <p class="sec-sub">v2.00 把原来的单页面板换成 FlClash 风格的三页控制台 —— Dashboard 看状态、Terminal 敲命令、Settings 调开关，底部是液体玻璃导航栏。</p>
+      </div>
+
+      <div class="ui-grid">
+        <div class="ui-shots reveal">
+          <figure class="ui-shot">
+            <img src="assets/ui-dashboard.webp" width="540" height="1200" alt="DirtyInit v2.00 Dashboard：payload 状态与设备遥测" loading="lazy">
+            <figcaption>Dashboard · PAYLOAD 流水线 + 六项遥测</figcaption>
+          </figure>
+          <figure class="ui-shot">
+            <img src="assets/ui-settings.webp" width="540" height="1200" alt="DirtyInit v2.00 Settings：应用、终端、ADB 与 API 桥" loading="lazy">
+            <figcaption>Settings · 应用 / 终端 / ADB / API BRIDGE</figcaption>
+          </figure>
+        </div>
+
+        <div class="ui-copy reveal">
+          <ul class="ui-list">
+            <li>
+              <h3>Dashboard：设备状态一眼看完</h3>
+              <p>CPU 频率与 P0 区间、内存与 zram、存储、网络速率与累计流量、电池温度、最热 thermal zone，全部约 1 秒刷新。</p>
+            </li>
+            <li>
+              <h3>PAYLOAD 流水线可视化</h3>
+              <p><code>idle → deploying → active / error</code> 四态 + 进度百分比，什么时候可以敲命令不用猜。</p>
+            </li>
+            <li>
+              <h3>Quick Actions 一键投递</h3>
+              <p>Activate payload / Enable ADB 5555 / Disable·Enable thermal / Lock CPU to max，每个按钮对应一个 payload bin。</p>
+            </li>
+            <li>
+              <h3>Terminal：init shell 与 adb shell</h3>
+              <p>内置终端可切换后端，命令走 init shell 通道；payload 未部署时右上角显示 <code>OFFLINE</code>。</p>
+            </li>
+            <li>
+              <h3>本地 API 桥（给 Agent 用）</h3>
+              <p>只监听 <code>127.0.0.1</code>、每个请求都要 Bearer Token：<code>GET /ping</code>、<code>GET /status</code>、<code>POST /exec</code>、<code>POST /deploy</code>。</p>
+            </li>
+          </ul>
+          <div class="code-block">
+            <button class="copy" data-copy="curl -s -H &quot;Authorization: Bearer &lt;TOKEN&gt;&quot; http://127.0.0.1:8080/status" aria-label="复制命令">复制</button>
+            <pre><span class="c-com"># Settings → API BRIDGE 里打开开关并复制 Token</span>
+curl -s -H "Authorization: Bearer &lt;TOKEN&gt;" \
+  http://127.0.0.1:8080/status</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= FLOW ================= -->
   <section class="section" id="flow">
     <div class="container">
       <div class="sec-head reveal">
-        <span class="sec-tag">03 — 流程</span>
+        <span class="sec-tag">04 — 流程</span>
         <h2>三步，从安装到 init shell</h2>
         <p class="sec-sub">以下命令可直接复制，替换 <code>&lt;手机IP&gt;</code> 即可。</p>
       </div>
@@ -266,16 +325,16 @@
           <h3>安装 APK</h3>
           <p>修改版使用 debug 签名，与官方原版不同，<strong>安装前先卸载原版</strong> <code>com.dirty.init</code>（会丢原 App 数据，sdcard 文件不受影响）。</p>
           <div class="code-block">
-            <button class="copy" data-copy="adb install -r dirtyinit_tools3.apk" aria-label="复制命令">复制</button>
+            <button class="copy" data-copy="adb install -r dirtyinit_v2.0.apk" aria-label="复制命令">复制</button>
             <pre><span class="c-com"># 卸载原版后安装修改版</span>
-adb install -r dirtyinit_tools3.apk</pre>
+adb install -r dirtyinit_v2.0.apk</pre>
           </div>
         </article>
 
         <article class="step reveal">
           <div class="step-n">STEP 2</div>
           <h3>触发部署</h3>
-          <p>点亮并解锁屏幕，打开 App 点 <code>ENABLE ADB 5555</code>（或 <code>ONE-TOUCH EXPLOIT</code>），也可以用命令无界面触发。安全锁屏状态下 Activity 会被延迟启动。</p>
+          <p>点亮并解锁屏幕，打开 App：在 Dashboard 上点 <code>ACTIVATE PAYLOAD</code>（或 <code>ENABLE ADB 5555</code>），等 PAYLOAD 卡片变成绿色的 <code>ACTIVE</code>。安全锁屏状态下 Activity 会被延迟启动。</p>
           <div class="code-block">
             <button class="copy" data-copy="adb shell am start -n com.dirty.init/.DirtyInitActivity --ez autorun true" aria-label="复制命令">复制</button>
             <pre><span class="c-com"># 等价于点击按钮</span>
@@ -312,19 +371,49 @@ adb shell /data/local/tmp/dirtyinit id   <span class="c-out"># uid=0(root) conte
   <section class="section" id="downloads">
     <div class="container">
       <div class="sec-head reveal">
-        <span class="sec-tag">04 — 下载</span>
+        <span class="sec-tag">05 — 下载</span>
         <h2>选择你的版本</h2>
         <p class="sec-sub">全部文件托管在本站，直接下载；每个文件附带 SHA-256 校验值。</p>
       </div>
 
       <div class="dl-grid">
-        <article class="dl-card featured reveal">
-          <div class="dl-badge">最新推荐</div>
+        <article class="dl-card featured wide reveal">
+          <div class="dl-badge">v2.00 · 最新推荐</div>
+          <div class="dl-head">
+            <div class="dl-ico">2</div>
+            <div>
+              <h3>DirtyInit v2.00</h3>
+              <p class="dl-sub">全新三页控制台 · 遥测 / 终端 / API 桥</p>
+            </div>
+          </div>
+          <ul class="dl-points">
+            <li>Dashboard：PAYLOAD 流水线 + CPU / 内存 / 网络 / 电池 / 热区实时遥测</li>
+            <li>Terminal：init shell 与 adb shell 双后端，命令栏直接执行</li>
+            <li>Settings：Keep awake / Auto deploy / 液体玻璃 / ADB 端口 / API BRIDGE</li>
+            <li>本地 API：<code>/ping</code> <code>/status</code> <code>/exec</code> <code>/deploy</code>，Token 校验、仅回环</li>
+          </ul>
+          <div class="dl-file">
+            <span class="dl-name">dirtyinit_v2.0.apk</span>
+            <span class="dl-size">421 KB</span>
+          </div>
+          <div class="dl-hash">
+            <span>SHA-256</span>
+            <code data-hash>bdff7b14b3a34d9e51595b4d7c54c04a8328c46e4615a975cc32e705d6f6cc79</code>
+            <button class="copy-mini" data-copy="bdff7b14b3a34d9e51595b4d7c54c04a8328c46e4615a975cc32e705d6f6cc79" aria-label="复制 SHA-256">copy</button>
+          </div>
+          <a class="btn btn-primary dl-btn" href="downloads/dirtyinit_v2.0.apk" download>
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 3v12m0 0 4.5-4.5M12 15 7.5 10.5M4 19.5h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            下载 APK
+          </a>
+        </article>
+
+        <article class="dl-card reveal">
+          <div class="dl-badge muted">经典版 v1.00</div>
           <div class="dl-head">
             <div class="dl-ico">T3</div>
             <div>
               <h3>DirtyInit Tools3</h3>
-              <p class="dl-sub">提权 + ADB 5555 + CPU / 温控面板</p>
+              <p class="dl-sub">v1.00 旧界面 · 提权 + ADB 5555 + CPU / 温控面板</p>
             </div>
           </div>
           <ul class="dl-points">
@@ -433,7 +522,8 @@ adb shell /data/local/tmp/dirtyinit id   <span class="c-out"># uid=0(root) conte
       </div>
 
       <p class="dl-foot reveal">
-        另附：<a href="downloads/dirtyinit_adb5555_combined_README.txt" download>二合一版原始说明.txt</a> ·
+        另附：<a href="downloads/dirtyinit_v2_usage.txt" download>v2.00 使用说明.txt</a> ·
+        <a href="downloads/dirtyinit_adb5555_combined_README.txt" download>二合一版原始说明.txt</a> ·
         同版本文件也在 <a href="https://github.com/chenwentao123456/dirtyinit/releases/latest" target="_blank" rel="noopener">GitHub Releases</a> 发布 ·
         文件校验：<code>sha256sum &lt;file&gt;</code> 与上方值一致即可放心使用。
       </p>
@@ -444,7 +534,7 @@ adb shell /data/local/tmp/dirtyinit id   <span class="c-out"># uid=0(root) conte
   <section class="section" id="compat">
     <div class="container">
       <div class="sec-head reveal">
-        <span class="sec-tag">05 — 兼容性</span>
+        <span class="sec-tag">06 — 兼容性</span>
         <h2>在哪些设备上验证过</h2>
         <p class="sec-sub">目前只在一台真机上完整验证；其他 Kirin 990 / HarmonyOS 4.2 机型属于「可尝试」。</p>
       </div>
@@ -483,7 +573,7 @@ adb shell sh /data/local/tmp/dirtyinit-hw.sh restore <span class="c-out"># 全�
   <section class="section" id="faq">
     <div class="container">
       <div class="sec-head reveal">
-        <span class="sec-tag">06 — 常见问题</span>
+        <span class="sec-tag">07 — 常见问题</span>
         <h2>动手前先看这几条</h2>
       </div>
       <div class="faq reveal">
@@ -502,6 +592,14 @@ adb shell sh /data/local/tmp/dirtyinit-hw.sh restore <span class="c-out"># 全�
         <details>
           <summary>安装时报签名冲突 / 覆盖失败？</summary>
           <p>修改版使用 debug 签名，与官方原版不同。先卸载 <code>com.dirty.init</code> 再安装（会丢原 App 数据，/sdcard 上的文件不受影响）。</p>
+        </details>
+        <details>
+          <summary>v2.00 和以前的 tools3 有什么区别？</summary>
+          <p>底层是同一条页缓存提权链路，v2.00 换的是前端：三页控制台（Dashboard / Terminal / Settings）、实时遥测、内置终端，以及只监听回环的本地 API 桥；tools3 是 v1.00 的单页面板，仍保留下载用于对照。包内 <code>versionName</code> 现在是 <code>2.00</code>、<code>versionCode</code> 是 <code>200</code>，签名与旧版相同，可直接覆盖安装。</p>
+        </details>
+        <details>
+          <summary>本地 API 桥会不会被别的 App 调用？</summary>
+          <p>默认关闭；打开后只监听 <code>127.0.0.1</code>，并且每个请求都要 Bearer Token（24 位随机 hex，可在 Settings 里 Rotate）。设备本机的其它 App 理论上能连到端口，但拿不到 Token 就无法调用；不需要时直接关掉开关。</p>
         </details>
         <details>
           <summary>为什么不能上 KernelSU？</summary>
@@ -523,7 +621,7 @@ adb shell sh /data/local/tmp/dirtyinit-hw.sh restore <span class="c-out"># 全�
   <section class="section" id="author">
     <div class="container">
       <div class="sec-head reveal">
-        <span class="sec-tag">07 — 作者</span>
+        <span class="sec-tag">08 — 作者</span>
         <h2>谁在维护这个项目</h2>
         <p class="sec-sub">站点、工程仓库与 APK 打包都在这里维护；有问题可以直接到 GitHub 开 issue。</p>
       </div>
@@ -544,7 +642,7 @@ adb shell sh /data/local/tmp/dirtyinit-hw.sh restore <span class="c-out"># 全�
           </ul>
         </div>
         <div class="author-meta">
-          <div class="author-meta-row"><span>项目</span><b>DirtyInit v1.00</b></div>
+          <div class="author-meta-row"><span>项目</span><b>DirtyInit v2.00</b></div>
           <div class="author-meta-row"><span>平台</span><b>Kirin 990 / HarmonyOS 4.2</b></div>
           <div class="author-meta-row"><span>许可</span><b>仅供研究测试</b></div>
         </div>
@@ -564,6 +662,7 @@ adb shell sh /data/local/tmp/dirtyinit-hw.sh restore <span class="c-out"># 全�
       </div>
     </div>
     <div class="footer-links">
+      <a href="#ui">界面</a>
       <a href="#downloads">下载</a>
       <a href="#faq">常见问题</a>
       <a href="#compat">兼容性</a>

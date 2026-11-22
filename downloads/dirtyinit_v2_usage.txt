@@ -1,0 +1,90 @@
+DirtyInit v2.00 · 使用说明
+==================================================
+
+文件      dirtyinit_v2.0.apk
+版本      2.00（versionCode 200）
+包名      com.dirty.init
+大小      431,455 字节（约 421 KB）
+SHA-256   bdff7b14b3a34d9e51595b4d7c54c04a8328c46e4615a975cc32e705d6f6cc79
+签名      Android Debug（CN=Android Debug, O=Android, C=US）
+          证书 SHA-256 8679d0b89e769e7f4f79735b4693c191d4b3d64dff11f8bc7dd19a6f27337c82
+平台      HUAWEI Kirin 990 / HarmonyOS 4.2.0 / Android 12 / kernel 5.10.43
+          minSdk 28 · targetSdk 34 · arm64-v8a
+
+
+一、这是什么
+--------------------------------------------------
+v2.00 是同一条页缓存提权链路（IpSecManager → libbase.so 页缓存写入 →
+relay init shell）的全新前端：FlClash 风格的三页控制台，把部署、遥测、
+终端和开关集中在一屏里。底下的 payload 与原版一致，界面换新。
+
+  1. Dashboard   payload 状态 + 设备遥测 + Quick Actions
+  2. Terminal    内置终端（init shell / adb shell 可切）
+  3. Settings    应用、终端、ADB、API BRIDGE 四组开关
+
+底部是液体玻璃导航栏，左右滑动或点图标切页。
+
+
+二、安装
+--------------------------------------------------
+1. 先卸载旧版（包名相同、debug 签名相同，理论上可直接覆盖，但换签名/换
+   渠道时建议干净安装）：
+      adb uninstall com.dirty.init
+2. 安装本版：
+      adb install -r dirtyinit_v2.0.apk
+3. 点开图标启动（Launcher 已改成 MainActivity 三页控制台）。
+
+无界面触发（等价于点按钮）：
+      adb shell am start -n com.dirty.init/.MainActivity
+
+
+三、Quick Actions 对照
+--------------------------------------------------
+  Activate payload      payload_chan.bin (0x40)  打开 init shell 通道
+  Enable ADB 5555       payload_adb.bin  (0x10)  setprop + ctl.restart adbd
+  Disable thermal       payload_thon.bin (0x12)  关闭温控
+  Enable thermal        payload_thoff.bin(0x11)  恢复温控
+  Lock CPU to max       payload_cpu_tpl.bin(0x20) 锁到最高频
+
+部署状态在 PAYLOAD 卡片上：idle → deploying（带百分比）→ active / error。
+active 文案 “Init channel ready” 表示通道已就绪，下一条 init 日志调用时激活。
+
+
+四、Terminal
+--------------------------------------------------
+  · 顶部可切 init shell / adb shell；
+  · 命令输入栏回车即执行，Clear 清屏，API 快速查看 Token；
+  · payload 未部署时右上角显示 OFFLINE；
+  · Font size / Scrollback 在 Settings → TERMINAL 里调。
+
+
+五、本地 API 桥（给自动化 / AI Agent）
+--------------------------------------------------
+Settings → API BRIDGE 打开 “Enable local API”，端口默认 8080，
+Token 为随机 24 位 hex，可复制或 Rotate。
+
+仅监听 127.0.0.1，需要 Bearer Token：
+
+  curl -s -H "Authorization: Bearer <TOKEN>" http://127.0.0.1:8080/ping
+  curl -s -H "Authorization: Bearer <TOKEN>" http://127.0.0.1:8080/status
+  curl -s -X POST -H "Authorization: Bearer <TOKEN>" \
+       -d '{"cmd":"id"}' http://127.0.0.1:8080/exec
+  curl -s -X POST -H "Authorization: Bearer <TOKEN>" \
+       -d '{"payload":"adb"}' http://127.0.0.1:8080/deploy
+
+端点在设备本机回环上，电脑侧可先 adb forward tcp:8080 tcp:8080 再访问。
+
+
+六、建议的操作顺序
+--------------------------------------------------
+先 Dashboard 点 Activate payload → 等状态变绿色 ACTIVE → 到 Terminal
+执行 id 验证 uid=0 / context=u:r:init:s0 → 需要 ADB 就点 Enable ADB 5555。
+
+注意：同一次开机内只干净部署一种 payload，混用可能读到被改过的 libbase
+字节导致 kernel panic；要换模式请重启手机。重启后 ADB 5555 不保留。
+
+
+七、风险与免责
+--------------------------------------------------
+页缓存写入属于不稳定原语，可能导致内核 panic（重启恢复）。本项目仅供
+自有设备的本地研究、测试与调优，请勿用于任何未授权设备；使用风险自负。
